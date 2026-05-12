@@ -1,0 +1,201 @@
+.container {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 24px 20px 60px;
+    gap: 24px;
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.topBar {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 12px;
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 14px 20px;
+    box-shadow: var(--shadow);
+}
+
+.topLeft { display: flex; align-items: center; gap: 12px; }
+
+.logo {
+    width: 44px; height: 44px;
+    border-radius: 50%; object-fit: contain;
+    border: 2px solid var(--accent);
+}
+
+.welcomeText { font-size: 15px; font-weight: 600; color: var(--text-primary); }
+.roleText { font-size: 12px; color: var(--accent); font-weight: 600; }
+.topRight { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+
+.navBtn {
+    padding: 8px 14px;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    background: transparent;
+    color: var(--text-secondary);
+    font-size: 13px; font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.navBtn:hover { border-color: var(--accent); color: var(--accent); }
+
+.signOutBtn {
+    padding: 8px 14px;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    background: transparent;
+    color: var(--text-muted);
+    font-size: 13px; cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.signOutBtn:hover { border-color: var(--accent); color: var(--accent); }
+
+.pageHeader { width: 100%; }
+
+.pageTitle {
+    font-size: 26px; font-weight: 700;
+    color: var(--text-primary);
+    font-family: 'Georgia', serif;
+    margin-bottom: 6px;
+}
+
+.pageSub { font-size: 14px; color: var(--text-muted); }
+
+.searchWrapper {
+    width: 100%;
+    position: relative;
+}
+
+.searchIcon {
+    position: absolute;
+    left: 16px; top: 50%;
+    transform: translateY(-50%);
+    font-size: 16px;
+    pointer-events: none;
+}
+
+.searchInput { padding-left: 44px; }
+
+.grid {
+    width: 100%;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 16px;
+}
+
+.card {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 22px 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    box-shadow: var(--shadow);
+    transition: border-color 0.2s ease, transform 0.2s ease;
+}
+
+.card:hover {
+    border-color: var(--accent);
+    transform: translateY(-2px);
+}
+
+.cardTop { display: flex; align-items: center; gap: 14px; }
+
+.avatar {
+    width: 56px; height: 56px;
+    border-radius: 50%; object-fit: cover;
+    border: 2px solid var(--accent);
+    flex-shrink: 0;
+}
+
+.avatarPlaceholder {
+    width: 56px; height: 56px;
+    border-radius: 50%;
+    background: var(--accent);
+    color: var(--accent-text);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 22px; font-weight: 700;
+    flex-shrink: 0;
+}
+
+.instructorName { font-size: 16px; font-weight: 700; color: var(--text-primary); }
+.instructorRole { font-size: 12px; color: var(--accent); font-weight: 600; margin-top: 2px; }
+.instructorCourse { font-size: 12px; color: var(--text-muted); margin-top: 2px; }
+
+.experience {
+    font-size: 13px; color: var(--text-secondary);
+    line-height: 1.6;
+    padding: 10px 14px;
+    background: var(--bg-secondary);
+    border-radius: 8px;
+}
+
+.codeRow {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    background: var(--bg-secondary);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 12px 14px;
+}
+
+.codeBox { display: flex; flex-direction: column; gap: 2px; }
+
+.codeLabel {
+    font-size: 10px; font-weight: 700;
+    letter-spacing: 0.15em;
+    color: var(--text-muted);
+}
+
+.codeValue {
+    font-size: 18px; font-weight: 700;
+    color: var(--accent);
+    font-family: monospace;
+    letter-spacing: 0.1em;
+}
+
+.copyBtn {
+    padding: 8px 16px;
+    border: 1.5px solid var(--accent);
+    border-radius: 8px;
+    background: transparent;
+    color: var(--accent);
+    font-size: 13px; font-weight: 700;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    white-space: nowrap;
+    flex-shrink: 0;
+}
+
+.copyBtn:hover {
+    background: var(--accent);
+    color: var(--accent-text);
+}
+
+.copySuccess {
+    background: rgba(74,222,128,0.1);
+    border-color: #4ade80;
+    color: #4ade80;
+}
+
+.emptyState {
+    display: flex; flex-direction: column;
+    align-items: center; gap: 12px;
+    padding: 60px 20px;
+    color: var(--text-muted); font-size: 15px;
+}
+
+.emptyState span { font-size: 40px; }

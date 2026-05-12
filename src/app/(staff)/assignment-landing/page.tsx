@@ -1,0 +1,1 @@
+export default function AssignmentLandingPage() { return <div style={{color:'white',display:'flex',alignItems:'center',justifyContent:'center',height:'100vh'}}><h1>Assignment Landing — Coming Soon</h1></div> }

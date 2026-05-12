@@ -1,0 +1,332 @@
+.container {
+    min-height: 100vh;
+    background-color: transparent;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 24px 20px 60px;
+    gap: 20px;
+    max-width: 700px;
+    margin: 0 auto;
+}
+
+.topBar {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 12px;
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 14px 20px;
+    box-shadow: var(--shadow);
+}
+
+.topLeft {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.avatar {
+    width: 52px;
+    height: 52px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid var(--accent);
+    flex-shrink: 0;
+}
+
+.avatarPlaceholder {
+    width: 52px;
+    height: 52px;
+    border-radius: 50%;
+    background: var(--accent);
+    color: var(--accent-text);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 20px;
+    font-weight: 700;
+    flex-shrink: 0;
+}
+
+.welcomeText {
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--text-primary);
+}
+
+.roleText {
+    font-size: 12px;
+    color: var(--accent);
+    font-weight: 600;
+}
+
+.courseText {
+    font-size: 12px;
+    color: var(--text-muted);
+}
+
+.topRight {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+
+.navBtn {
+    padding: 8px 14px;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    background: transparent;
+    color: var(--text-secondary);
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.navBtn:hover {
+    border-color: var(--accent);
+    color: var(--accent);
+}
+
+.signOutBtn {
+    padding: 8px 14px;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    background: transparent;
+    color: var(--text-muted);
+    font-size: 13px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.signOutBtn:hover {
+    border-color: var(--accent);
+    color: var(--accent);
+}
+
+/* ID Card */
+.idCard {
+    width: 100%;
+    background: linear-gradient(135deg, var(--bg-card), var(--bg-secondary));
+    border: 1px solid var(--accent);
+    border-radius: 16px;
+    padding: 20px 24px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    box-shadow: var(--shadow);
+}
+
+.idLeft {}
+
+.idLabel {
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--text-muted);
+    letter-spacing: 0.15em;
+    margin-bottom: 6px;
+}
+
+.idValue {
+    font-size: 22px;
+    font-weight: 700;
+    color: var(--accent);
+    font-family: 'Georgia', serif;
+    letter-spacing: 0.1em;
+}
+
+.idLogo {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    object-fit: contain;
+    opacity: 0.8;
+}
+
+/* Quick Actions */
+.actionsRow {
+    width: 100%;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+    gap: 12px;
+}
+
+.actionCard {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 20px 16px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    text-align: center;
+}
+
+.actionCard:hover {
+    border-color: var(--accent);
+    transform: translateY(-2px);
+    box-shadow: var(--shadow);
+}
+
+.actionIcon {
+    font-size: 28px;
+}
+
+.actionLabel {
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--text-primary);
+}
+
+.actionSub {
+    font-size: 12px;
+    color: var(--text-muted);
+}
+
+/* Stats */
+.statsRow {
+    width: 100%;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
+}
+
+.statCard {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 16px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+    text-align: center;
+}
+
+.statValue {
+    font-size: 28px;
+    font-weight: 700;
+    color: var(--accent);
+    font-family: 'Georgia', serif;
+}
+
+.statLabel {
+    font-size: 11px;
+    color: var(--text-muted);
+    font-weight: 600;
+    letter-spacing: 0.04em;
+}
+
+/* Section */
+.section {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.sectionHeader {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.sectionTitle {
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--text-primary);
+    font-family: 'Georgia', serif;
+}
+
+.privateTag {
+    font-size: 12px;
+    color: var(--text-muted);
+    background: var(--bg-secondary);
+    padding: 4px 10px;
+    border-radius: 999px;
+}
+
+.journalSub {
+    font-size: 13px;
+    color: var(--text-muted);
+    margin-top: -4px;
+}
+
+.journalTextarea {
+    resize: vertical;
+    min-height: 140px;
+    font-family: inherit;
+    font-size: 14px;
+    line-height: 1.7;
+}
+
+/* Grades */
+.gradesList {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.gradeCard {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-left: 3px solid var(--accent);
+    border-radius: 10px;
+    padding: 14px 16px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+}
+
+.gradeLeft {
+    flex: 1;
+}
+
+.gradeAssignment {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--text-primary);
+}
+
+.gradeFeedback {
+    font-size: 13px;
+    color: var(--text-muted);
+    margin-top: 4px;
+}
+
+.gradeBadge {
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--accent);
+    background: rgba(212, 160, 23, 0.1);
+    padding: 6px 14px;
+    border-radius: 8px;
+    flex-shrink: 0;
+}
+
+.viewAllBtn {
+    background: none;
+    border: none;
+    color: var(--accent);
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    padding: 0;
+    text-align: left;
+}
+
+.viewAllBtn:hover {
+    text-decoration: underline;
+}

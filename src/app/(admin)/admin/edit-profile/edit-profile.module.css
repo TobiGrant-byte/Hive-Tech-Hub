@@ -1,0 +1,172 @@
+.container {
+    min-height: 100vh;
+    padding: 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.topBar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 16px;
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 16px 24px;
+    box-shadow: var(--shadow);
+}
+
+.topLeft { display: flex; align-items: center; gap: 16px; }
+
+.logo {
+    width: 48px; height: 48px;
+    border-radius: 50%; object-fit: contain;
+    border: 2px solid var(--accent);
+}
+
+.welcomeText { font-size: 12px; color: var(--text-muted); margin-bottom: 2px; }
+
+.adminName {
+    font-size: 17px; font-weight: 700;
+    color: var(--text-primary); font-family: 'Georgia', serif;
+}
+
+.adminRole { font-size: 12px; color: var(--accent); font-weight: 600; }
+
+.backBtn {
+    padding: 9px 18px;
+    border: 1.5px solid var(--accent);
+    border-radius: 8px;
+    background: transparent;
+    color: var(--accent);
+    font-size: 13px; font-weight: 600;
+    cursor: pointer;
+    transition: all 0.25s ease;
+    position: relative; overflow: hidden;
+}
+
+.backBtn::before {
+    content: ''; position: absolute; inset: 0;
+    background: var(--accent);
+    transform: scaleX(0); transform-origin: left;
+    transition: transform 0.25s ease; z-index: 0;
+}
+
+.backBtn:hover::before { transform: scaleX(1); }
+.backBtn:hover { color: var(--accent-text); }
+.backBtn span { position: relative; z-index: 1; }
+
+.content { display: flex; flex-direction: column; gap: 20px; }
+
+.card {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 28px 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    box-shadow: var(--shadow);
+}
+
+.cardTitle {
+    font-size: 20px; font-weight: 700;
+    color: var(--text-primary); font-family: 'Georgia', serif;
+}
+
+.cardSub { font-size: 14px; color: var(--text-muted); margin-top: -8px; }
+
+.avatarSection {
+    display: flex; align-items: center; gap: 20px;
+    padding: 16px;
+    background: var(--bg-secondary);
+    border-radius: 12px;
+}
+
+.avatarLabel {
+    position: relative; cursor: pointer; flex-shrink: 0;
+    border-radius: 50%; overflow: hidden;
+}
+
+.avatarImg {
+    width: 72px; height: 72px;
+    border-radius: 50%; object-fit: cover;
+    border: 2px solid var(--accent);
+    display: block;
+}
+
+.avatarPlaceholder {
+    width: 72px; height: 72px;
+    border-radius: 50%;
+    background: var(--accent);
+    color: var(--accent-text);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 26px; font-weight: 700;
+}
+
+.avatarOverlay {
+    position: absolute; inset: 0;
+    background: rgba(0,0,0,0.55);
+    color: white; font-size: 11px; font-weight: 600;
+    display: flex; align-items: center; justify-content: center;
+    border-radius: 50%;
+    opacity: 0; transition: opacity 0.2s ease;
+}
+
+.avatarLabel:hover .avatarOverlay { opacity: 1; }
+
+.hiddenInput { display: none; }
+
+.avatarName { font-size: 15px; font-weight: 600; color: var(--text-primary); }
+.avatarEmail { font-size: 13px; color: var(--text-muted); margin-bottom: 6px; }
+
+.avatarBadge {
+    font-size: 11px; font-weight: 600;
+    color: var(--accent);
+    background: rgba(212,160,23,0.1);
+    padding: 3px 10px; border-radius: 999px;
+}
+
+.field { display: flex; flex-direction: column; gap: 8px; }
+
+.label { font-size: 11px; font-weight: 600; letter-spacing: 0.14em; color: var(--text-muted); }
+
+.fieldNote { font-size: 12px; color: var(--text-muted); }
+
+.pwWrap { position: relative; }
+
+.eyeBtn {
+    position: absolute; right: 14px; top: 50%; transform: translateY(-50%);
+    background: none; border: none; cursor: pointer; font-size: 16px;
+}
+
+.strengthBar {
+    display: flex; align-items: center; gap: 12px;
+}
+
+.strengthTrack {
+    flex: 1; height: 4px;
+    background: var(--border); border-radius: 999px; overflow: hidden;
+}
+
+.strengthFill {
+    height: 100%; border-radius: 999px;
+    transition: width 0.4s ease, background 0.4s ease;
+}
+
+.strengthLabel { font-size: 12px; font-weight: 600; color: var(--text-muted); min-width: 44px; }
+
+.error {
+    background: rgba(220,38,38,0.1); border: 1px solid rgba(220,38,38,0.3);
+    color: #ef4444; padding: 12px 16px; border-radius: 8px; font-size: 14px;
+}
+
+.success {
+    background: rgba(74,222,128,0.1); border: 1px solid rgba(74,222,128,0.3);
+    color: #4ade80; padding: 12px 16px; border-radius: 8px; font-size: 14px;
+}
