@@ -39,22 +39,30 @@ export default function LoginPage() {
     const handleSignIn = async () => {
         if (!loginData.email || !loginData.password) { setError('Please fill in all fields'); return }
         setLoading(true); setError(null)
+
         const { data, error } = await supabase.auth.signInWithPassword({
             email: loginData.email, password: loginData.password,
         })
+
         if (error) { setError(error.message); setLoading(false); return }
+
         if (data.user) {
-            const role = data.user.user_metadata?.role
-            if (role === 'admin')  { router.push('/admin');  return }
-            if (role === 'staff')  { router.push('/staff');  return }
-            if (role === 'student') {
-                const { data: profile } = await supabase
-                    .from('profiles').select('status').eq('id', data.user.id).single()
-                if (profile?.status === 'pending') { router.push('/awaiting'); return }
-                router.push('/student'); return
-            }
-            router.push('/admin')
+            const { data: profile } = await supabase
+                .from('profiles')
+                .select('role, status')
+                .eq('id', data.user.id)
+                .single()
+
+            if (!profile) { setError('Profile not found.'); setLoading(false); return }
+
+            if (profile.status === 'pending')  { router.push('/awaiting'); return }
+            if (profile.status === 'rejected') { setError('Your account has been rejected.'); setLoading(false); return }
+
+            if (profile.role === 'admin')   { router.push('/admin');   return }
+            if (profile.role === 'staff')   { router.push('/staff');   return }
+            if (profile.role === 'student') { router.push('/student'); return }
         }
+
         setLoading(false)
     }
 
