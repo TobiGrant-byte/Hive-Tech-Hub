@@ -11,7 +11,7 @@ export default function FilePreview({ fileUrl }: FilePreviewProps) {
     const [htmlContent, setHtmlContent] = useState<string | null>(null)
     const [loading, setLoading] = useState(false)
 
-    const isHtml = fileUrl.toLowerCase().includes('.html') || fileUrl.toLowerCase().includes('.htm')
+    const isHtml = /\.(html|htm)$/i.test(fileUrl)
     const isImage = /\.(png|jpg|jpeg|gif|webp|svg)$/i.test(fileUrl)
     const isPdf = /\.pdf$/i.test(fileUrl)
 
@@ -30,15 +30,23 @@ export default function FilePreview({ fileUrl }: FilePreviewProps) {
 
     const handleClick = () => {
         if (isHtml) {
-            if (previewing) {
-                setPreviewing(false)
-            } else {
-                loadHtml()
-            }
+            previewing ? setPreviewing(false) : loadHtml()
+        } else if (isPdf || isImage) {
+            setPreviewing(!previewing)
         } else {
             window.open(fileUrl, '_blank')
         }
     }
+
+    const buttonLabel = loading
+        ? 'Loading...'
+        : isHtml
+            ? previewing ? 'Hide Preview' : 'Preview HTML'
+            : isPdf
+                ? previewing ? 'Hide PDF' : 'View PDF'
+                : isImage
+                    ? previewing ? 'Hide Image' : 'View Image'
+                    : 'View File'
 
     return (
         <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
@@ -61,18 +69,13 @@ export default function FilePreview({ fileUrl }: FilePreviewProps) {
                     transition: 'all 0.2s ease',
                 }}
             >
-                {loading ? '⏳ Loading...' :
-                    isHtml ? (previewing ? '🙈 Hide Preview' : '🌐 Preview HTML') :
-                        isImage ? '🖼️ View Image' :
-                            isPdf ? '📄 View PDF' :
-                                '📎 View File'}
+                {buttonLabel}
             </button>
 
-            {/* Image inline preview */}
-            {isImage && (
+            {isImage && previewing && (
                 <img
                     src={fileUrl}
-                    alt="Submitted file"
+                    alt="Attached file"
                     style={{
                         maxWidth: '100%',
                         borderRadius: '10px',
@@ -81,13 +84,11 @@ export default function FilePreview({ fileUrl }: FilePreviewProps) {
                 />
             )}
 
-            {/* HTML sandboxed preview */}
-            {isHtml && previewing && htmlContent && (
+            {isPdf && previewing && (
                 <div style={{
                     border: '1.5px solid var(--accent)',
                     borderRadius: '12px',
                     overflow: 'hidden',
-                    background: '#fff',
                 }}>
                     <div style={{
                         padding: '8px 14px',
@@ -99,8 +100,7 @@ export default function FilePreview({ fileUrl }: FilePreviewProps) {
                         alignItems: 'center',
                         gap: '8px',
                     }}>
-                        <span>🌐</span>
-                        <span>HTML Preview — sandboxed</span>
+                        <span>PDF Preview</span>
 
                         <a
                         href={fileUrl}
@@ -114,22 +114,71 @@ export default function FilePreview({ fileUrl }: FilePreviewProps) {
                         textDecoration: 'none',
                     }}
                         >
-                        Open in new tab ↗
+                        Open in new tab
                     </a>
                 </div>
                 <iframe
-                srcDoc={htmlContent}
-             sandbox="allow-scripts"
+                src={fileUrl}
              style={{
                  width: '100%',
-                 height: '400px',
+                 height: '500px',
                  border: 'none',
                  display: 'block',
+                 background: '#fff',
              }}
-             title="HTML Preview"
+             title="PDF Preview"
         />
 </div>
 )}
+
+{isHtml && previewing && htmlContent && (
+    <div style={{
+        border: '1.5px solid var(--accent)',
+        borderRadius: '12px',
+        overflow: 'hidden',
+        background: '#fff',
+    }}>
+        <div style={{
+            padding: '8px 14px',
+            background: 'var(--bg-secondary)',
+            borderBottom: '1px solid var(--border)',
+            fontSize: '12px',
+            color: 'var(--text-muted)',
+            display: 'flex',
+            alignItems: 'center',
+            gap: '8px',
+        }}>
+            <span>HTML Preview</span>
+
+            <a
+            href={fileUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            style={{
+            marginLeft: 'auto',
+            color: 'var(--accent)',
+            fontSize: '12px',
+            fontWeight: 600,
+            textDecoration: 'none',
+        }}
+            >
+            Open in new tab
+        </a>
+    </div>
+    <iframe
+        srcDoc={htmlContent}
+        sandbox="allow-scripts"
+        style={{
+            width: '100%',
+            height: '400px',
+            border: 'none',
+            display: 'block',
+        }}
+        title="HTML Preview"
+    />
+</div>
+)}
+
 </div>
 )
 }

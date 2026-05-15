@@ -35,6 +35,10 @@ export default function AdminDashboard() {
     const [userStats, setUserStats] = useState<any>(null)
     const [statsLoading, setStatsLoading] = useState(false)
 
+    // Post file upload state — ADDED
+    const [postFile, setPostFile] = useState<File | null>(null)
+    const [postFileName, setPostFileName] = useState('')
+
     const [roleData, setRoleData] = useState<any[]>([])
     const [courseData, setCourseData] = useState<any[]>([])
     const [signupData, setSignupData] = useState<any[]>([])
@@ -130,8 +134,50 @@ export default function AdminDashboard() {
     const createPost = async () => {
         if (!postContent.trim() || !profile) return
         setPostLoading(true)
-        await supabase.from('posts').insert({ author_id: profile.id, content: postContent.trim() })
+
+        let fileUrl: string | null = null
+
+        if (postFile) {
+            const fileExt = postFile.name.split('.').pop()
+            const fileName = `post-${profile.id}-${Date.now()}.${fileExt}`
+
+            const { data: uploadData, error: uploadError } = await supabase.storage
+                .from('posts')
+                .upload(fileName, postFile, { upsert: true })
+
+            if (uploadError) {
+                console.error('Upload error:', uploadError.message)
+                alert(`File upload failed: ${uploadError.message}`)
+                setPostLoading(false)
+                return
+            }
+
+            console.log('Upload success:', uploadData)
+
+            const { data: urlData } = supabase.storage
+                .from('posts')
+                .getPublicUrl(fileName)
+
+            fileUrl = urlData.publicUrl
+            console.log('File URL:', fileUrl)
+        }
+
+        const { error: insertError } = await supabase.from('posts').insert({
+            author_id: profile.id,
+            content: postContent.trim(),
+            file_url: fileUrl,
+        })
+
+        if (insertError) {
+            console.error('Insert error:', insertError.message)
+            alert(`Post failed: ${insertError.message}`)
+            setPostLoading(false)
+            return
+        }
+
         setPostContent('')
+        setPostFile(null)
+        setPostFileName('')
         setPostLoading(false)
         alert('Post published!')
     }
@@ -182,8 +228,8 @@ export default function AdminDashboard() {
                         {user.instructor_code && <span className={styles.instructorCode}>🔑 {user.instructor_code}</span>}
                         {user.course && (
                             <span className={styles.course}>
-                {user.course === 'webdev' ? '🌐 Web Dev' : user.course === 'hatchdev' ? '☕ HatchDev' : '📱 Flutter'}
-              </span>
+                                {user.course === 'webdev' ? '🌐 Web Dev' : user.course === 'hatchdev' ? '☕ HatchDev' : '📱 Flutter'}
+                            </span>
                         )}
                         {user.teaching_experience && (
                             <span className={styles.experience}>📝 {user.teaching_experience.slice(0, 60)}...</span>
@@ -201,11 +247,10 @@ export default function AdminDashboard() {
         </div>
     )
 
-    // Loading guard
     if (authLoading) return <BeeLoader text="Loading dashboard..." />
 
-
     if (!profile) return null
+
     return (
         <div className={styles.container}>
 
@@ -396,14 +441,70 @@ export default function AdminDashboard() {
                         <h2 className={styles.sectionTitle}>Post an Update</h2>
                         <p className={styles.sectionSub}>This will appear on the Main Page for all students and staff.</p>
                         <div className={styles.postEditor}>
-              <textarea
-                  className={`input ${styles.postTextarea}`}
-                  placeholder="Write your update here..."
-                  value={postContent}
-                  onChange={(e) => setPostContent(e.target.value)}
-                  rows={6}
-              />
-                            <button className="btn-primary" onClick={createPost} disabled={postLoading || !postContent.trim()}>
+                            <textarea
+                                className={`input ${styles.postTextarea}`}
+                                placeholder="Write your update here..."
+                                value={postContent}
+                                onChange={(e) => setPostContent(e.target.value)}
+                                rows={6}
+                            />
+
+                            {/* FILE UPLOAD — ADDED */}
+                            <label style={{ cursor: 'pointer' }}>
+                                <input
+                                    type="file"
+                                    style={{ display: 'none' }}
+                                    onChange={(e) => {
+                                        const f = e.target.files?.[0]
+                                        if (f) { setPostFile(f); setPostFileName(f.name) }
+                                    }}
+                                />
+                                <div style={{
+                                    display: 'flex',
+                                    alignItems: 'center',
+                                    gap: '12px',
+                                    padding: '14px 18px',
+                                    border: '1.5px dashed var(--border-input)',
+                                    borderRadius: '10px',
+                                    background: 'var(--bg-input)',
+                                    transition: 'border-color 0.2s ease',
+                                    cursor: 'pointer',
+                                }}>
+                                    <span style={{ fontSize: '20px' }}>📎</span>
+                                    <span style={{
+                                        flex: 1,
+                                        fontSize: '14px',
+                                        color: postFileName ? 'var(--text-primary)' : 'var(--text-muted)',
+                                        wordBreak: 'break-all',
+                                    }}>
+                                        {postFileName || 'Attach a file (optional)'}
+                                    </span>
+                                    {postFileName && (
+                                        <span
+                                            style={{
+                                                fontSize: '13px',
+                                                color: 'var(--text-muted)',
+                                                cursor: 'pointer',
+                                                padding: '2px 6px',
+                                                borderRadius: '4px',
+                                            }}
+                                            onClick={(e) => {
+                                                e.preventDefault()
+                                                setPostFile(null)
+                                                setPostFileName('')
+                                            }}
+                                        >
+                                            ✕
+                                        </span>
+                                    )}
+                                </div>
+                            </label>
+
+                            <button
+                                className="btn-primary"
+                                onClick={createPost}
+                                disabled={postLoading || !postContent.trim()}
+                            >
                                 {postLoading ? 'Publishing...' : '📢 Publish Update'}
                             </button>
                         </div>

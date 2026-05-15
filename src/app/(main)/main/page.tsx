@@ -10,6 +10,7 @@ import { isFriday } from '@/utils/isFriday'
 import { timeUntilFriday } from '@/utils/timeUntilFriday'
 import type { Reaction } from '@/types'
 import styles from './main.module.css'
+import FilePreview from '@/components/FilePreview'
 
 export default function MainPage() {
     const { profile, loading: authLoading, signOut } = useAuth()
@@ -373,6 +374,10 @@ export default function MainPage() {
                             </div>
 
                             <p className={styles.postContent}>{post.content}</p>
+
+                            {post.file_url && (
+                                <FilePreview fileUrl={post.file_url} />
+                            )}
 
                             <div className={styles.reactionsRow}>
                                 {EMOJIS.map((emoji) => {
