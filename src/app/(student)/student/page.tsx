@@ -5,7 +5,6 @@ import { useRouter } from 'next/navigation'
 import { createClient } from '@/lib/supabaseClient'
 import { useAuth } from '@/context/AuthContext'
 import { useTheme } from '@/context/ThemeContext'
-import { usePreventBack } from '@/hooks/usePreventBack'
 import styles from './student.module.css'
 
 export default function StudentPage() {
@@ -14,8 +13,6 @@ export default function StudentPage() {
     const router = useRouter()
     const supabase = createClient()
 
-    usePreventBack('/student')
-
     const [journal, setJournal] = useState('')
     const [journalSaved, setJournalSaved] = useState(false)
     const [grades, setGrades] = useState<any[]>([])
@@ -23,16 +20,24 @@ export default function StudentPage() {
     const [dataLoading, setDataLoading] = useState(true)
 
     useEffect(() => {
+        console.log('authLoading:', authLoading, '| profile:', profile?.role, '| status:', profile?.status)
+
         if (authLoading) return
+
         if (!profile) {
-            window.location.href = '/login'
-            return
+            const timer = setTimeout(() => {
+                window.location.href = '/login'
+            }, 1500)
+            return () => clearTimeout(timer)
         }
+
         if (profile.role !== 'student') {
             window.location.href = '/login'
             return
         }
+
         fetchData(profile.id)
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [authLoading, profile])
 
     const fetchData = async (userId: string) => {
@@ -82,7 +87,6 @@ export default function StudentPage() {
         setTimeout(() => setJournalSaved(false), 2000)
     }
 
-    // Loading guard
     if (authLoading) {
         return (
             <div style={{
@@ -196,9 +200,9 @@ export default function StudentPage() {
                     <span className={styles.statLabel}>Grades Received</span>
                 </div>
                 <div className={styles.statCard}>
-          <span className={styles.statValue}>
-            {assignments.filter(a => !a.grade).length}
-          </span>
+                    <span className={styles.statValue}>
+                        {assignments.filter(a => !a.grade).length}
+                    </span>
                     <span className={styles.statLabel}>Pending Grades</span>
                 </div>
             </div>

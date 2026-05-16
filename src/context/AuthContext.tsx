@@ -30,31 +30,72 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     const supabase = createClient()
 
     const fetchProfile = async (userId: string) => {
-        const { data } = await supabase
-            .from('profiles')
-            .select('*')
-            .eq('id', userId)
-            .single()
-        setProfile(data)
-        setLoading(false)
+        try {
+            const { data } = await supabase
+                .from('profiles')
+                .select('*')
+                .eq('id', userId)
+                .single()
+            setProfile(data)
+        } catch {
+            setProfile(null)
+        } finally {
+            setLoading(false)
+        }
     }
 
     const refreshProfile = async () => {
-        const { data: { user } } = await supabase.auth.getUser()
-        if (user) await fetchProfile(user.id)
+        try {
+            const { data: { user } } = await supabase.auth.getUser()
+            if (user) await fetchProfile(user.id)
+        } catch {
+            setLoading(false)
+        }
     }
 
     useEffect(() => {
-        supabase.auth.getSession().then(({ data: { session } }) => {
-            if (session?.user) {
-                fetchProfile(session.user.id)
-            } else {
-                setLoading(false)
+        let mounted = true
+
+        // Safety timeout — if auth takes more than 5 seconds stop loading
+        const timeout = setTimeout(() => {
+            if (mounted) setLoading(false)
+        }, 5000)
+
+        const init = async () => {
+            try {
+                // Try getSession first — fastest, reads from cookie
+                const { data: { session } } = await supabase.auth.getSession()
+
+                if (!mounted) return
+
+                if (session?.user) {
+                    clearTimeout(timeout)
+                    await fetchProfile(session.user.id)
+                } else {
+                    // Fallback to getUser — verifies with server
+                    const { data: { user } } = await supabase.auth.getUser()
+
+                    if (!mounted) return
+
+                    if (user) {
+                        clearTimeout(timeout)
+                        await fetchProfile(user.id)
+                    } else {
+                        clearTimeout(timeout)
+                        setLoading(false)
+                    }
+                }
+            } catch {
+                if (mounted) setLoading(false)
+                clearTimeout(timeout)
             }
-        })
+        }
+
+        init()
 
         const { data: { subscription } } = supabase.auth.onAuthStateChange(
             async (event, session) => {
+                if (!mounted) return
                 if (session?.user) {
                     await fetchProfile(session.user.id)
                 } else {
@@ -64,7 +105,11 @@ export function AuthProvider({ children }: { children: ReactNode }) {
             }
         )
 
-        return () => subscription.unsubscribe()
+        return () => {
+            mounted = false
+            clearTimeout(timeout)
+            subscription.unsubscribe()
+        }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
 

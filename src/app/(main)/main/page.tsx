@@ -31,9 +31,12 @@ export default function MainPage() {
     // Wait for auth before doing anything
     useEffect(() => {
         if (authLoading) return
+
         if (!profile) {
-            router.replace('/login')
-            return
+            const timer = setTimeout(() => {
+                router.replace('/login')
+            }, 1500)
+            return () => clearTimeout(timer)
         }
 
         fetchPosts()

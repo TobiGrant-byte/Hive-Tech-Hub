@@ -40,32 +40,39 @@ export default function LoginPage() {
         if (!loginData.email || !loginData.password) { setError('Please fill in all fields'); return }
         setLoading(true); setError(null)
 
+        console.log('Attempting sign in with:', loginData.email)
+
         const { data, error } = await supabase.auth.signInWithPassword({
             email: loginData.email, password: loginData.password,
         })
 
+        console.log('Sign in result:', { data, error })
+
         if (error) { setError(error.message); setLoading(false); return }
 
         if (data.user) {
-            const { data: profile } = await supabase
+            console.log('User found:', data.user.id)
+
+            const { data: profile, error: profileError } = await supabase
                 .from('profiles')
                 .select('role, status')
                 .eq('id', data.user.id)
                 .single()
 
+            console.log('Profile result:', { profile, profileError })
+
             if (!profile) { setError('Profile not found.'); setLoading(false); return }
 
-            if (profile.status === 'pending')  { router.push('/awaiting'); return }
+            if (profile.status === 'pending')  { window.location.href = '/awaiting'; return }
             if (profile.status === 'rejected') { setError('Your account has been rejected.'); setLoading(false); return }
 
-            if (profile.role === 'admin')   { router.push('/admin');   return }
-            if (profile.role === 'staff')   { router.push('/staff');   return }
-            if (profile.role === 'student') { router.push('/student'); return }
+            if (profile.role === 'admin')   { window.location.href = '/admin';   return }
+            if (profile.role === 'staff')   { window.location.href = '/staff';   return }
+            if (profile.role === 'student') { window.location.href = '/student'; return }
         }
 
         setLoading(false)
     }
-
     const handleSignUp = async () => {
         if (!signupData.name || !signupData.email || !signupData.password) {
             setError('Please fill in all required fields'); return

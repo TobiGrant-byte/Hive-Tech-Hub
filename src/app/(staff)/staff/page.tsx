@@ -51,9 +51,21 @@ export default function StaffPage() {
 
     useEffect(() => {
         if (authLoading) return
-        if (!profile) { router.replace('/login'); return }
-        if (profile.role !== 'staff') { router.replace('/login'); return }
+
+        if (!profile) {
+            const timer = setTimeout(() => {
+                router.replace('/login')
+            }, 1500)
+            return () => clearTimeout(timer)
+        }
+
+        if (profile.role !== 'staff') {
+            router.replace('/login')
+            return
+        }
+
         fetchAll()
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [authLoading, profile])
 
     const fetchAll = async () => {
